@@ -8,7 +8,7 @@ const experienciesSchemaValidation = Joi.object({
     .items(
       Joi.object({
         date: Joi.string().required(),
-        availables: Joi.number().greater(0).required(),
+        availables: Joi.number().integer().greater(0).required(),
       })
     )
     .min(1)

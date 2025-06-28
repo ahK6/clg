@@ -4,7 +4,6 @@ require("dotenv").config();
 exports.verifyToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
 
-  console.log("ssdf " + JSON.stringify(req.headers, null, 2));
   if (!authHeader) {
     return res.status(403).json({ message: "No hay token" });
   }
