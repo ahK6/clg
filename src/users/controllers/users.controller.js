@@ -17,7 +17,14 @@ exports.signUp = async (req, res) => {
     });
     res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
-    res.status(500).json({ error: "Error creating user" });
+    console.log(JSON.stringify(error));
+    if (error.code === "P2002") {
+      return res
+        .status(400)
+        .json({ error: "El email ya está registrado en el sistema." });
+    }
+
+    return res.status(500).json({ error: "Error creating user" });
   } finally {
     await prisma.$disconnect();
   }
@@ -44,10 +51,10 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.status(200).json({ message: "Login successful", token });
+    return res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error logging in" });
+    return res.status(500).json({ error: "Error logging in" });
   } finally {
     await prisma.$disconnect();
   }
